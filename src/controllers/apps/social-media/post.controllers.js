@@ -310,7 +310,12 @@ const removePostImage = asyncHandler(async (req, res) => {
 
 const getAllPosts = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
-  const postAggregation = SocialPost.aggregate([...postCommonAggregation(req)]);
+  const postAggregation = SocialPost.aggregate([
+    {
+      $sort: { createdAt: -1 },
+    },
+    ...postCommonAggregation(req),
+  ]);
 
   const posts = await SocialPost.aggregatePaginate(
     postAggregation,
@@ -352,6 +357,9 @@ const getPostsByUsername = asyncHandler(async (req, res) => {
         author: new mongoose.Types.ObjectId(userId),
       },
     },
+    {
+      $sort: { createdAt: -1 }, // newest first
+    },
     ...postCommonAggregation(req),
   ]);
 
@@ -380,6 +388,9 @@ const getMyPosts = asyncHandler(async (req, res) => {
       $match: {
         author: new mongoose.Types.ObjectId(req.user?._id),
       },
+    },
+    {
+      $sort: { createdAt: -1 }, // newest first
     },
     ...postCommonAggregation(req),
   ]);
@@ -413,10 +424,16 @@ const getBookMarkedPosts = asyncHandler(async (req, res) => {
     {
       $lookup: {
         from: "socialposts",
-        localField: "postId",
-        foreignField: "_id",
+        let: { localPostId: "$postId" }, // Pass the local postId to the lookup
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ["$_id", "$$localPostId"] }, // Filter for specific post
+            },
+          },
+          ...postCommonAggregation(req), // Apply common transformations (likes, etc.)
+        ],
         as: "post",
-        pipeline: postCommonAggregation(req), // after lookup we need to structure the posts same as other post apis
       },
     },
     {
@@ -425,9 +442,8 @@ const getBookMarkedPosts = asyncHandler(async (req, res) => {
       },
     },
     {
-      $project: {
-        _id: 0,
-        post: 1,
+      $match: {
+        post: { $exists: true, $ne: null },
       },
     },
     {
@@ -435,13 +451,17 @@ const getBookMarkedPosts = asyncHandler(async (req, res) => {
         newRoot: "$post",
       },
     },
+    {
+      $sort: { createdAt: -1 },
+    },
+    // REMOVED manual $skip and $limit stages here
   ]);
 
   const posts = await SocialBookmark.aggregatePaginate(
     postAggregation,
     getMongoosePaginationOptions({
-      page,
-      limit,
+      page: Number(page),
+      limit: Number(limit),
       customLabels: {
         totalDocs: "totalBookmarkedPosts",
         docs: "bookmarkedPosts",

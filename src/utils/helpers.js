@@ -97,6 +97,14 @@ export const getPaginatedPayload = (dataArray, page, limit) => {
 export const getStaticFilePath = (req, fileName) => {
   return `${req.protocol}://${req.get("host")}/images/${fileName}`;
 };
+// export const getStaticFilePath = (req, fileName) => {
+//   const protocol =
+//     req.headers["x-forwarded-proto"]?.toString() || req.protocol;
+
+//   const host = req.get("host");
+
+//   return `${protocol}://${host}/images/${fileName}`;
+// };
 
 /**
  *

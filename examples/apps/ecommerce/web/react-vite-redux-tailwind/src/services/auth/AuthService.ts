@@ -10,7 +10,7 @@ import { LoginResp, RefreshTokenResp, USER_ROLES, User } from "./AuthTypes";
 
 class AuthService {
   USER_BASE_URL = "/api/v1/users";
-  GOOGLE_LOGIN_REDIRECT_URL = "/api/v1/users/google";
+  GOOGLE_LOGIN_REDIRECT_URL = "/";
 
   /* Login Service */
   async loginService(

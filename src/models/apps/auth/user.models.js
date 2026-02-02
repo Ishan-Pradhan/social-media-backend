@@ -21,7 +21,7 @@ const userSchema = new Schema(
         localPath: String,
       },
       default: {
-        url: `https://via.placeholder.com/200x200.png`,
+        url: `https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0gzQgDQEELoFutX1S63C.jpg`,
         localPath: "",
       },
     },

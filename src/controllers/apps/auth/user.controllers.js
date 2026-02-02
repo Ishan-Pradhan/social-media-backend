@@ -37,7 +37,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
 };
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { email, username, password, role } = req.body;
+  const { email, username, password } = req.body;
 
   const existedUser = await User.findOne({
     $or: [{ username }, { email }],
@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
     username,
     isEmailVerified: false,
-    role: role || UserRolesEnum.USER,
+    role: UserRolesEnum.USER,
   });
 
   /**
@@ -75,9 +75,7 @@ const registerUser = asyncHandler(async (req, res) => {
     subject: "Please verify your email",
     mailgenContent: emailVerificationMailgenContent(
       user.username,
-      `${req.protocol}://${req.get(
-        "host"
-      )}/api/v1/users/verify-email/${unHashedToken}`
+      `http://localhost:3000/users/verify-email/${unHashedToken}`
     ),
   });
 
@@ -168,7 +166,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     req.user._id,
     {
       $set: {
-        refreshToken: '',
+        refreshToken: "",
       },
     },
     { new: true }
@@ -252,9 +250,7 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
     subject: "Please verify your email",
     mailgenContent: emailVerificationMailgenContent(
       user.username,
-      `${req.protocol}://${req.get(
-        "host"
-      )}/api/v1/users/verify-email/${unHashedToken}`
+      `http://localhost:3000/users/verify-email/${unHashedToken}`
     ),
   });
   return res

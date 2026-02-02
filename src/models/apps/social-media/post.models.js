@@ -31,5 +31,6 @@ const postSchema = new Schema(
 );
 
 postSchema.plugin(mongooseAggregatePaginate);
+postSchema.index({ createdAt: -1 });
 
 export const SocialPost = mongoose.model("SocialPost", postSchema);

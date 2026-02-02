@@ -7,6 +7,8 @@ export let dbInstance = undefined;
 
 const connectDB = async () => {
   try {
+    console.log("MONGO URI USED:", process.env.MONGODB_URI);
+
     const connectionInstance = await mongoose.connect(
       `${process.env.MONGODB_URI}/${DB_NAME}`
     );
