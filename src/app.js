@@ -85,15 +85,18 @@ app.use(express.static("public")); // configure static file to save images local
 app.use(cookieParser());
 
 // required for passport
+app.set("trust proxy", 1);
+
 app.use(
   session({
+    name: "connect.sid",
     secret: process.env.EXPRESS_SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true, // HTTPS only
-      sameSite: "none", // Required for cross-domain cookies
+      secure: true,
+      sameSite: "none",
     },
   })
 ); // session secret
