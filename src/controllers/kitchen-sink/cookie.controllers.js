@@ -10,18 +10,19 @@ const getCookies = asyncHandler(async (req, res) => {
 const setCookie = asyncHandler(async (req, res) => {
   const cookieObject = req.body;
 
-  Object.entries(cookieObject).forEach((entry) => {
-    res.cookie(...entry);
+  Object.entries(cookieObject).forEach(([key, value]) => {
+    res.cookie(key, value, {
+      httpOnly: true,
+      secure: true, // REQUIRED on Railway (HTTPS)
+      sameSite: "none", // REQUIRED for cross-site
+      path: "/",
+    });
   });
 
   return res
     .status(200)
     .json(
-      new ApiResponse(
-        200,
-        { cookies: { ...req.cookies, ...cookieObject } },
-        "Cookie has been set"
-      )
+      new ApiResponse(200, { cookies: cookieObject }, "Cookie has been set")
     );
 });
 
@@ -30,7 +31,12 @@ const removeCookie = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .clearCookie(cookieKey)
+    .clearCookie(cookieKey, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+    })
     .json(
       new ApiResponse(
         200,
