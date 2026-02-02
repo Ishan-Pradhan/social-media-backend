@@ -90,6 +90,11 @@ app.use(
     secret: process.env.EXPRESS_SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      secure: true, // HTTPS only
+      sameSite: "none", // Required for cross-domain cookies
+    },
   })
 ); // session secret
 app.use(passport.initialize());
