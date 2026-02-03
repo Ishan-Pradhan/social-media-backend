@@ -70,6 +70,8 @@ const registerUser = asyncHandler(async (req, res) => {
   user.emailVerificationExpiry = tokenExpiry;
   await user.save({ validateBeforeSave: false });
 
+  console.log("About to send email to:", user.email);
+
   await sendEmail({
     email: user?.email,
     subject: "Please verify your email",
@@ -80,6 +82,7 @@ const registerUser = asyncHandler(async (req, res) => {
       )}/api/v1/users/verify-email/${unHashedToken}`
     ),
   });
+  console.log("Email sent");
 
   const createdUser = await User.findById(user._id).select(
     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
