@@ -13,8 +13,8 @@ const setCookie = asyncHandler(async (req, res) => {
   Object.entries(cookieObject).forEach(([key, value]) => {
     res.cookie(key, value, {
       httpOnly: true,
-      secure: true, // REQUIRED on Railway (HTTPS)
-      sameSite: "none", // REQUIRED for cross-site
+      secure: process.env.NODE_ENV === "production", // REQUIRED on Railway (HTTPS)
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // REQUIRED for cross-site
       path: "/",
     });
   });

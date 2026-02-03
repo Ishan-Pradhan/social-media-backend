@@ -78,10 +78,9 @@ const registerUser = asyncHandler(async (req, res) => {
       subject: "Please verify your email",
       mailgenContent: emailVerificationMailgenContent(
         user.username,
-        `https://social-media-backend-production-8e07.up.railway.app/api/v1/users/verify-email/${unHashedToken}`
+        `http://localhost:3000/users/verify-email/${unHashedToken}`
       ),
     });
-    console.log("Email sent");
   } catch (error) {
     console.log("error sending mail", error);
   }
@@ -153,7 +152,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none", // Required for cross-site cookies
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Required for cross-site cookies
     path: "/", // Send cookies for all paths
   };
 
@@ -184,7 +183,7 @@ const logoutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none", // Required for cross-site cookies
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Required for cross-site cookies
     path: "/", // Send cookies for all paths
   };
 
@@ -261,7 +260,8 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
     subject: "Please verify your email",
     mailgenContent: emailVerificationMailgenContent(
       user.username,
-      `https://social-media-backend-production-8e07.up.railway.app/api/v1/users/verify-email/${unHashedToken}`
+      // frontend url
+      `http://localhost:3000/users/verify-email/${unHashedToken}`
     ),
   });
   return res
@@ -297,7 +297,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none", // Required for cross-site cookies
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Required for cross-site cookies
       path: "/", // Send cookies for all paths
     };
 
@@ -460,7 +460,7 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none", // Required for cross-site cookies
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Required for cross-site cookies
     path: "/", // Send cookies for all paths
   };
 

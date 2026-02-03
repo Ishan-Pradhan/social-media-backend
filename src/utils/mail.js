@@ -43,7 +43,6 @@ const sendEmail = async (options) => {
   };
 
   try {
-    console.log("Mail is  sent ");
     await transporter.sendMail(mail);
   } catch (error) {
     // As sending email is not strongly coupled to the business logic it is not worth to raise an error when email sending fails
@@ -51,7 +50,6 @@ const sendEmail = async (options) => {
     logger.error(
       "Email service failed silently. Make sure you have provided your MAILTRAP credentials in the .env file"
     );
-    console.log(error);
     logger.error("Error: ", error);
   }
 };
