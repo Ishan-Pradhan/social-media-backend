@@ -89,9 +89,15 @@ app.set("trust proxy", 1);
 
 app.use(
   session({
+    name: "connect.sid",
     secret: process.env.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    },
   })
 ); // session secret
 app.use(passport.initialize());
