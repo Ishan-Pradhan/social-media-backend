@@ -43,7 +43,6 @@ const sendEmail = async (options) => {
   };
 
   try {
-    console.log("Mail sent:", info.messageId);
     console.log("Mail is  sent ");
     await transporter.sendMail(mail);
   } catch (error) {
