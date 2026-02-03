@@ -72,15 +72,19 @@ const registerUser = asyncHandler(async (req, res) => {
 
   console.log("About to send email to:", user.email);
 
-  await sendEmail({
-    email: user?.email,
-    subject: "Please verify your email",
-    mailgenContent: emailVerificationMailgenContent(
-      user.username,
-      `https://social-media-backend-production-8e07.up.railway.app/api/v1/users/verify-email/${unHashedToken}`
-    ),
-  });
-  console.log("Email sent");
+  try {
+    await sendEmail({
+      email: user?.email,
+      subject: "Please verify your email",
+      mailgenContent: emailVerificationMailgenContent(
+        user.username,
+        `https://social-media-backend-production-8e07.up.railway.app/api/v1/users/verify-email/${unHashedToken}`
+      ),
+    });
+    console.log("Email sent");
+  } catch (error) {
+    console.log("error sending mail", error);
+  }
 
   const createdUser = await User.findById(user._id).select(
     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
