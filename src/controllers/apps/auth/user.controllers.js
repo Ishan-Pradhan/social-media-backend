@@ -77,9 +77,7 @@ const registerUser = asyncHandler(async (req, res) => {
     subject: "Please verify your email",
     mailgenContent: emailVerificationMailgenContent(
       user.username,
-      `${req.protocol}://${req.get(
-        "host"
-      )}/api/v1/users/verify-email/${unHashedToken}`
+      `https://social-media-backend-production-8e07.up.railway.app/api/v1/users/verify-email/${unHashedToken}`
     ),
   });
   console.log("Email sent");
@@ -259,9 +257,7 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
     subject: "Please verify your email",
     mailgenContent: emailVerificationMailgenContent(
       user.username,
-      `${req.protocol}://${req.get(
-        "host"
-      )}/api/v1/users/verify-email/${unHashedToken}`
+      `https://social-media-backend-production-8e07.up.railway.app/api/v1/users/verify-email/${unHashedToken}`
     ),
   });
   return res
