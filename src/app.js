@@ -26,7 +26,7 @@ const file = fs.readFileSync(path.resolve(__dirname, "./swagger.yaml"), "utf8");
 const swaggerDocument = YAML.parse(
   file?.replace(
     "- url: ${{server}}",
-    `- url: ${process.env.FREEAPI_HOST_URL || "http://localhost:8080"}/api/v1`
+    `- url: ${"https://social-media-backend-production-8e07.up.railway.app"}/api/v1`
   )
 );
 
@@ -89,15 +89,9 @@ app.set("trust proxy", 1);
 
 app.use(
   session({
-    name: "connect.sid",
     secret: process.env.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    },
   })
 ); // session secret
 app.use(passport.initialize());
