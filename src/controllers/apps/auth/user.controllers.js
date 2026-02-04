@@ -74,11 +74,13 @@ const registerUser = asyncHandler(async (req, res) => {
 
   try {
     await sendEmail({
-      email: user?.email,
+      email: user?.email, // ? handling if email is undefined (this will not happen as we have validation)
       subject: "Please verify your email",
       mailgenContent: emailVerificationMailgenContent(
         user.username,
-        `https://social-media-backend-production-8e07.up.railway.app/api/v1/users/verify-email/${unHashedToken}`
+        `${req.protocol}://${req.get(
+          "host"
+        )}/api/v1/users/verify-email/${unHashedToken}`
       ),
     });
     console.log("Email sent");
@@ -470,7 +472,7 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
     .cookie("refreshToken", refreshToken, options) // set the refresh token in the cookie
     .redirect(
       // redirect user to the frontend with access and refresh token in case user is not using cookies
-      process.env.CLIENT_SSO_REDIRECT_URL
+      `${process.env.CLIENT_SSO_REDIRECT_URL}?accessToken=${accessToken}&refreshToken=${refreshToken}`
     );
 });
 
