@@ -154,6 +154,7 @@ const loginUser = asyncHandler(async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Required for cross-site cookies
     path: "/", // Send cookies for all paths
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   };
 
   return res
@@ -299,6 +300,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Required for cross-site cookies
       path: "/", // Send cookies for all paths
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 
     const { accessToken, refreshToken: newRefreshToken } =
@@ -462,6 +464,7 @@ const handleSocialLogin = asyncHandler(async (req, res) => {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Required for cross-site cookies
     path: "/", // Send cookies for all paths
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   };
 
   return res
